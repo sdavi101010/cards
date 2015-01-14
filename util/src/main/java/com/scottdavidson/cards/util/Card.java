@@ -210,5 +210,4 @@ public class Card implements Comparable<Card> {
 		this.hash = computeHash();
 	}
 
-
 }

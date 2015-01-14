@@ -112,8 +112,8 @@ public abstract class AbstractSuitStackStrategy implements StackStrategy {
 	 * @param card the card to be checked
 	 * @return the next value of the card to be played on the provided card
 	 */
-	protected abstract int nextValue(Card card);
-
+	protected abstract int nextValue(Card card);	
+	
 	protected AbstractSuitStackStrategy(Card.Suit suit) {
 		this.suit = suit;
 	}

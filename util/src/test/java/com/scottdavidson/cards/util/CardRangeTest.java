@@ -84,7 +84,7 @@ public class CardRangeTest {
 				range.addCard(FOUR_DIAMONDS);
 				assertEquals(ACE_DIAMONDS, range.getFromCard());
 				assertEquals(FOUR_DIAMONDS, range.getToCard());
-				assertEquals(CardRange.Direction.DESCENDING, range.getDirection());
+				assertEquals(Orientation.DESCENDING, range.getDirection());
 			}
 			{
 				CardRange range = CardRange.newCardRange(Card.Suit.DIAMONDS,

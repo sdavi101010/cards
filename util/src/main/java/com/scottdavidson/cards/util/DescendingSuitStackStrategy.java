@@ -1,8 +1,9 @@
 package com.scottdavidson.cards.util;
 
 public class DescendingSuitStackStrategy extends AbstractSuitStackStrategy {
-	
-	public static DescendingSuitStackStrategy newDescendingSuitStackStrategy(Card.Suit suit) {
+
+	public static DescendingSuitStackStrategy newDescendingSuitStackStrategy(
+			Card.Suit suit) {
 		return new DescendingSuitStackStrategy(suit);
 	}
 
@@ -10,14 +11,14 @@ public class DescendingSuitStackStrategy extends AbstractSuitStackStrategy {
 	public boolean cardCanBePushed(Card topCard, Card candidateCard) {
 
 		// Let the abstract parent do its check first ...
-		if ( !super.cardCanBePushed(topCard, candidateCard)) {
+		if (!super.cardCanBePushed(topCard, candidateCard)) {
 			return false;
 		}
-		
+
 		// No other tests (yet)
 		return true;
 	}
-	
+
 	@Override
 	protected int requiredValueOfFirstCard() {
 		return Card.KING;
@@ -30,7 +31,7 @@ public class DescendingSuitStackStrategy extends AbstractSuitStackStrategy {
 
 	@Override
 	protected int nextValue(Card card) {
-		
+
 		return card.getValue() - 1;
 	}
 

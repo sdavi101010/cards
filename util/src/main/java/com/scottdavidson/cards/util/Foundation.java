@@ -47,13 +47,13 @@ public class Foundation {
 	 * @return a cloned version of this Foundation
 	 */
 	public Foundation cloneFoundation() {
-
-		// Copy each of the stacks
+		
+		// Copy each of the stacks 
 		List<CardStack> clonedStacks = new ArrayList<CardStack>();
-		for (CardStack stack : this.stacks) {
+		for ( CardStack stack : this.stacks ) {
 			clonedStacks.add(CardStack.newCardStack(stack));
 		}
-
+		
 		// Instantiate a new instance of Foundation and return it
 		return new Foundation(clonedStacks);
 
@@ -88,7 +88,6 @@ public class Foundation {
 	 */
 	@Override
 	public String toString() {
-
 		return PrettyPrint.printFoundation(this);
 
 	}
@@ -155,7 +154,6 @@ public class Foundation {
 		return null;
 
 	}
-	
 
 	private Foundation(StackStrategy heartsStackStrategy,
 			StackStrategy diamondsStackStrategy,
@@ -170,12 +168,11 @@ public class Foundation {
 	}
 
 	private Foundation(List<CardStack> initializedStacks) {
-
-		// Extract out the individual CardStacks from the initialized stack
-		// argument
-		for (CardStack initializedStack : initializedStacks) {
+		
+		// Extract out the individual CardStacks from the initialized stack argument
+		for ( CardStack initializedStack : initializedStacks ) {
 			this.stacks.add(initializedStack);
 		}
 	}
-
+	
 }

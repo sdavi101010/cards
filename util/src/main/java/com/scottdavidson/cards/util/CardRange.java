@@ -99,7 +99,6 @@ public class CardRange {
 		// Case 2: Range is Descending
 		else {
 			this.list.add(candidateCard);
-
 		}
 
 		// Return the candidate
@@ -110,15 +109,17 @@ public class CardRange {
 	public boolean contains(Card card) {
 		return this.list.contains(card);
 	}
-	
+
 	public boolean isEmpty() {
 		return this.list.isEmpty();
 	}
 
 	public Card remove(Card card) {
 
-		// If NEUTRAL or ASCENDING, confirm the first card is the one and then remove it
-		if (Orientation.NEUTRAL == this.direction || Orientation.ASCENDING == this.direction) {
+		// If NEUTRAL or ASCENDING, confirm the first card is the one and then
+		// remove it
+		if (Orientation.NEUTRAL == this.direction
+				|| Orientation.ASCENDING == this.direction) {
 			if (card != getFromCard()) {
 				throw new CardUtilException("Removing " + card.prettyPrint()
 						+ " from ASCENDING Range but from card doesn't match"
@@ -127,8 +128,7 @@ public class CardRange {
 
 			// Remove the first card
 			this.list.remove(0);
-		}
-		else {
+		} else {
 			if (card != getToCard()) {
 				throw new CardUtilException("Removing " + card.prettyPrint()
 						+ " from DESCENDING Range but to card doesn't match"
@@ -136,10 +136,10 @@ public class CardRange {
 			}
 
 			// Remove the last card
-			this.list.remove(this.list.size()-1);
-			
+			this.list.remove(this.list.size() - 1);
+
 		}
-		
+
 		return card;
 	}
 
