@@ -1,5 +1,8 @@
 package com.scottdavidson.cards.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represent an ordered range of cards in a particular suit. This class tracks
  * if there's a gap and determines the direction (ascending or descending) based
@@ -10,20 +13,15 @@ package com.scottdavidson.cards.util;
  */
 public class CardRange {
 
-	public enum Direction {
-		NEUTRAL, ASCENDING, DESCENDING
-	}
-
-	private Card.Suit suit;
-	private Card initialCard;
-	private Card fromCard;
-	private Card toCard;
-	private Direction direction;
+	private List<Card> list = new ArrayList<Card>();
+	private final Card.Suit suit;
+	private Orientation direction;
 
 	public static CardRange newCardRange(Card.Suit suit, Card initialCard) {
-		
-		if ( null == suit || null == initialCard ) {
-			throw new CardUtilException("A CardRange requires both a suit and initial card to be constructed");
+
+		if (null == suit || null == initialCard) {
+			throw new CardUtilException(
+					"A CardRange requires both a suit and initial card to be constructed");
 		}
 		return new CardRange(suit, initialCard);
 	}
@@ -42,19 +40,19 @@ public class CardRange {
 		}
 
 		// Case 1: Range is Neutral --> can be added!
-		if (Direction.NEUTRAL == this.direction) {
+		if (Orientation.NEUTRAL == this.direction) {
 			return true;
 		}
 
 		// Case 2: Range is Ascending --> candidate must be lower than from
-		else if (Direction.ASCENDING == this.direction
-				&& candidateCard.getValue() < this.fromCard.getValue()) {
+		else if (Orientation.ASCENDING == this.direction
+				&& candidateCard.getValue() < getFromCard().getValue()) {
 			return true;
 		}
 
 		// Case 3: Range is Descending --> candidate must be higher than to
-		else if (Direction.DESCENDING == this.direction
-				&& candidateCard.getValue() > this.toCard.getValue()) {
+		else if (Orientation.DESCENDING == this.direction
+				&& candidateCard.getValue() > getToCard().getValue()) {
 			return true;
 		}
 
@@ -78,31 +76,29 @@ public class CardRange {
 			return null;
 		}
 
-		// Case 1: Range is Neutral
-		if (Direction.NEUTRAL == this.direction) {
+		// Case 1: Range is Neutral (meaning there's only one Card)
+		if (Orientation.NEUTRAL == this.direction) {
 
 			// Add the candidate to the range and use it to determine the
 			// direction
-			if (candidateCard.getValue() < this.initialCard.getValue()) {
-				this.direction = Direction.ASCENDING;
-				this.fromCard = candidateCard;
-				this.toCard = initialCard;
+			if (candidateCard.getValue() < this.getFromCard().getValue()) {
+				this.direction = Orientation.ASCENDING;
+				this.list.add(0, candidateCard);
 			} else {
-				this.direction = Direction.DESCENDING;
-				this.fromCard = initialCard;
-				this.toCard = candidateCard;
+				this.direction = Orientation.DESCENDING;
+				this.list.add(candidateCard);
 			}
 		}
 
 		// Case 2: Range is Ascending
-		else if (Direction.ASCENDING == this.direction) {
-			this.fromCard = candidateCard;
+		else if (Orientation.ASCENDING == this.direction) {
+			this.list.add(0, candidateCard);
 
 		}
 
 		// Case 2: Range is Descending
 		else {
-			this.toCard = candidateCard;
+			this.list.add(candidateCard);
 
 		}
 
@@ -111,19 +107,55 @@ public class CardRange {
 
 	}
 
+	public boolean contains(Card card) {
+		return this.list.contains(card);
+	}
+	
+	public boolean isEmpty() {
+		return this.list.isEmpty();
+	}
+
+	public Card remove(Card card) {
+
+		// If NEUTRAL or ASCENDING, confirm the first card is the one and then remove it
+		if (Orientation.NEUTRAL == this.direction || Orientation.ASCENDING == this.direction) {
+			if (card != getFromCard()) {
+				throw new CardUtilException("Removing " + card.prettyPrint()
+						+ " from ASCENDING Range but from card doesn't match"
+						+ this.toString());
+			}
+
+			// Remove the first card
+			this.list.remove(0);
+		}
+		else {
+			if (card != getToCard()) {
+				throw new CardUtilException("Removing " + card.prettyPrint()
+						+ " from DESCENDING Range but to card doesn't match"
+						+ this.toString());
+			}
+
+			// Remove the last card
+			this.list.remove(this.list.size()-1);
+			
+		}
+		
+		return card;
+	}
+
 	public Card.Suit getSuit() {
 		return suit;
 	}
 
 	public Card getFromCard() {
-		return fromCard;
+		return this.list.get(0);
 	}
 
 	public Card getToCard() {
-		return toCard;
+		return this.list.get(this.list.size() - 1);
 	}
 
-	public Direction getDirection() {
+	public Orientation getDirection() {
 		return direction;
 	}
 
@@ -133,17 +165,16 @@ public class CardRange {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Direction --> " + this.direction).append("\n");
 		builder.append(
-				"[ " + fromCard.conciseToString(false) + " , "
-						+ toCard.conciseToString(false) + " ]").append("\n");
+				"[ " + getFromCard().conciseToString(false) + " , "
+						+ getToCard().conciseToString(false) + " ]").append(
+				"\n");
 		return builder.toString();
 	}
 
 	private CardRange(Card.Suit suit, Card initialCard) {
 		this.suit = suit;
-		this.initialCard = initialCard;
-		this.fromCard = initialCard;
-		this.toCard = initialCard;
-		this.direction = Direction.NEUTRAL;
+		this.direction = Orientation.NEUTRAL;
+		this.list.add(initialCard);
 	}
 
 }

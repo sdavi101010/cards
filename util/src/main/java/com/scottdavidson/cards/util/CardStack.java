@@ -44,6 +44,14 @@ public class CardStack extends Stack<Card> {
 
 		return this.stackStrategy.cardCanBePushed(topCard(), candidateCard);
 	}
+	
+	public List<Card> cardsThatCanBePlayed() {
+		return this.stackStrategy.cardsThatCanBePlayed(topCard());
+	}
+	
+	public boolean isComplete() {
+		return this.stackStrategy.isComplete(topCard());
+	}
 
 	@Override
 	public Card push(Card card) {

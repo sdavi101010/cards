@@ -52,9 +52,9 @@ public class Tableaus {
 		return this.tableaus[index].addCard(card);
 	}
 	
-	public List<Card> getTopCards() {
+	public List<ColoradoTableauCard> getTopCards() {
 		
-		List<Card> topCards = new ArrayList<Card>();
+		List<ColoradoTableauCard> topCards = new ArrayList<ColoradoTableauCard>();
 		for ( Tableau tableau : this.tableaus ) {
 			topCards.add(tableau.topCard());
 		}

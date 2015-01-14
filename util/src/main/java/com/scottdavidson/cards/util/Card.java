@@ -3,7 +3,7 @@ package com.scottdavidson.cards.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Card {
+public class Card implements Comparable<Card> {
 
 	public enum Suit {
 		HEARTS, DIAMONDS, SPADES, CLUBS
@@ -17,6 +17,7 @@ public class Card {
 
 	private final int value;
 	private final Suit suit;
+	private final int hash;
 
 	public static Card newCard(int value, Suit suit) {
 
@@ -96,7 +97,7 @@ public class Card {
 		// If a Joker
 		if (getValue() == JOKER) {
 			builder.append(getValueAsString());
-		} else if ( getValue() == 10 ) {
+		} else if (getValue() == 10) {
 			String valueAsConciseString = "X";
 			String suitAtConciseString = getSuit().toString().substring(0, 1);
 			builder.append(valueAsConciseString).append(":")
@@ -180,8 +181,34 @@ public class Card {
 		}
 	}
 
+	@Override
+	public int compareTo(Card comparisonCard) {
+		
+		if ( this.hash == comparisonCard.hash ) {
+			return 0;
+		}
+		else if ( this.hash > comparisonCard.hash ) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
+	}
+
+	protected int computeHash() {
+
+		if (getValue() == JOKER) {
+			return 0;
+		} else {
+			return this.value + this.suit.ordinal() * KING;
+		}
+	}
+
 	private Card(int value, Suit suit) {
 		this.value = value;
 		this.suit = suit;
+		this.hash = computeHash();
 	}
+
+
 }

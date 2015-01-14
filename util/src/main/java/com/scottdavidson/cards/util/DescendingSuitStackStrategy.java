@@ -18,8 +18,20 @@ public class DescendingSuitStackStrategy extends AbstractSuitStackStrategy {
 		return true;
 	}
 	
+	@Override
 	protected int requiredValueOfFirstCard() {
 		return Card.KING;
+	}
+
+	@Override
+	protected int requiredValueOfLastCard() {
+		return Card.ACE;
+	}
+
+	@Override
+	protected int nextValue(Card card) {
+		
+		return card.getValue() - 1;
 	}
 
 	private DescendingSuitStackStrategy(Card.Suit suit) {

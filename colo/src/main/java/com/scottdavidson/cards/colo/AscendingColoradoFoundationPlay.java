@@ -39,12 +39,18 @@ import com.scottdavidson.cards.util.Play;
 // advantageous
 // simply b/c you're moving the Foundation that's farthest from the goal, but
 // also b/c there's a 5, 6 and 7 also to be played.
-public class ColoradoFoundationPlay implements Play {
+
+// NOTES 2 (Simple):
+//  ** For an initial implementation (possibly rename this to SimpleAscendingCFP)
+//  1. Identify *all* of the cards that can be played on the ASC foundation.
+//  2. Find first card which is defined as ASC and play it (DONE)
+//  3. If two cards of same instance are available, define first one as DESC and play the second (DONE)
+//  4. Find first card available and play it (DONE)
+
+public class AscendingColoradoFoundationPlay implements Play {
 
 	private boolean playTableauOnAscendingFoundation = false;
-	private boolean playTableauOnDescendingFoundation = false;
 	private boolean playDeckCardOnAscendingFoundation = false;
-	private boolean playDeckCardOnDescendingFoundation = false;
 	private ColoradoGame coloradoGame;
 
 	@Override
@@ -71,26 +77,10 @@ public class ColoradoFoundationPlay implements Play {
 			}
 		}
 
-		// Check to see if can play on DESC Foundation
-		Foundation descendingFoundation = coloradoGame
-				.getDescendingFoundation();
-		for (ColoradoTableauCard card : coloradoGame.getTableaus().getTopCards()) {
-			if (descendingFoundation.cardCanBePlayedOnto(card.getCard())) {
-				playTableauOnDescendingFoundation = true;
-				return;
-			}
-		}
-
 		// Check to see if can play deck card on ASC Foundation
 		Card deckCard = this.coloradoGame.getDeckCard();
 		if (ascendingFoundation.cardCanBePlayedOnto(deckCard)) {
 			playDeckCardOnAscendingFoundation = true;
-			return;
-		}
-
-		// Check to see if can play deck card on DESC Foundation
-		if (descendingFoundation.cardCanBePlayedOnto(deckCard)) {
-			playDeckCardOnDescendingFoundation = true;
 			return;
 		}
 
@@ -101,9 +91,7 @@ public class ColoradoFoundationPlay implements Play {
 
 		// Return the logical or of the play booleans
 		return this.playTableauOnAscendingFoundation
-				|| this.playTableauOnDescendingFoundation
-				|| this.playDeckCardOnAscendingFoundation
-				|| this.playDeckCardOnDescendingFoundation;
+				|| this.playDeckCardOnAscendingFoundation;
 	}
 
 	@Override
@@ -120,9 +108,7 @@ public class ColoradoFoundationPlay implements Play {
 	@Override
 	public void resetPlay() {
 		this.playTableauOnAscendingFoundation = false;
-		this.playTableauOnDescendingFoundation = false;
 		this.playDeckCardOnAscendingFoundation = false;
-		this.playDeckCardOnDescendingFoundation = false;
 	}
 
 	@Override

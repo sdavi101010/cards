@@ -23,6 +23,16 @@ public class AscendingSuitStackStrategy extends AbstractSuitStackStrategy {
 		return Card.ACE;
 	}
 
+	protected int requiredValueOfLastCard() {
+		return Card.KING;
+	}
+
+	@Override
+	protected int nextValue(Card card) {
+		
+		return card.getValue() + 1;
+	}
+
 	private AscendingSuitStackStrategy(Card.Suit suit) {
 		super(suit);
 	}

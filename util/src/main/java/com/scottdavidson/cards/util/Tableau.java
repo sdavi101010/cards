@@ -14,6 +14,8 @@ import java.util.List;
  * 
  */
 public class Tableau {
+	
+	// TODO - The basic Tableau class should be wrapped by ColoradoTableau, which provides the "extras"
 
 	private CardStack stack;
 	private List<CardRange> ranges;
@@ -73,12 +75,26 @@ public class Tableau {
 		
 	}
 	
-	public Card topCard() {
+	public ColoradoTableauCard topCard() {
 		if ( this.stack.isEmpty() ) {
 			return null;
 		}
 		else {
-			return this.stack.peek();
+			
+			// Get (peek) the top card
+			Card topCard = this.stack.peek();
+			
+			// Find the associated range
+			for ( CardRange range : this.ranges ) {
+				
+				if ( range.contains(topCard)) {
+					return ColoradoTableauCard.newColoradoTableauCard(topCard, range.getDirection());
+				}
+			}
+			
+			// Something's wrong ... should have found the card !
+			throw new CardUtilException("Didn't find top card : " + topCard.prettyPrint() +
+					" in any range.");
 		}
 	}
 	

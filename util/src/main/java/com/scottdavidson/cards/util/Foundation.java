@@ -12,6 +12,8 @@ import java.util.List;
  * 
  */
 public class Foundation {
+	
+	// TODO - Need to abstract out a Foundation interface and then one specific for Colorado
 
 	private final List<CardStack> stacks = new ArrayList<CardStack>(4);
 
@@ -45,18 +47,18 @@ public class Foundation {
 	 * @return a cloned version of this Foundation
 	 */
 	public Foundation cloneFoundation() {
-		
-		// Copy each of the stacks 
+
+		// Copy each of the stacks
 		List<CardStack> clonedStacks = new ArrayList<CardStack>();
-		for ( CardStack stack : this.stacks ) {
+		for (CardStack stack : this.stacks) {
 			clonedStacks.add(CardStack.newCardStack(stack));
 		}
-		
+
 		// Instantiate a new instance of Foundation and return it
 		return new Foundation(clonedStacks);
 
 	}
-	
+
 	public Card playCardOnto(Card card) {
 
 		// Error check
@@ -86,7 +88,7 @@ public class Foundation {
 	 */
 	@Override
 	public String toString() {
-		
+
 		return PrettyPrint.printFoundation(this);
 
 	}
@@ -103,6 +105,45 @@ public class Foundation {
 		return topCards;
 	}
 
+	/**
+	 * Returns a list of Card objects which can be played onto one of the
+	 * Foundation stacks. <br>
+	 * <p>
+	 * This list can be empty in the case where all Foundation stacks are filled
+	 * / completed or could be all Kings or Aces if none have any cards played
+	 * yet.
+	 * 
+	 * @return
+	 */
+	public List<Card> playableCards() {
+		
+		// Instantiate the list to be returned
+		List<Card> cards = new ArrayList<Card>(4);
+		
+		// Iterate through the stacks
+		for (CardStack stack : stacks) {
+			
+
+			// If final card, skip (don't add anything to the list)
+			if ( stack.isComplete() ) {
+				break;
+			}
+			
+			// Else, get the cards that can be played
+			else {
+							
+				// Get the cards that can be played and add them to the list
+				List<Card> cardsThatCanBePlayed = stack.cardsThatCanBePlayed();
+				
+				if ( null != cardsThatCanBePlayed ) {
+					cards.addAll(cardsThatCanBePlayed);
+				}
+			}
+		}		
+
+		return cards;
+	}
+
 	protected CardStack identifyCardStackThatCanBePlayedOnto(Card card) {
 
 		// Check to see if the card can be played on any of the stacks
@@ -114,7 +155,7 @@ public class Foundation {
 		return null;
 
 	}
-
+	
 
 	private Foundation(StackStrategy heartsStackStrategy,
 			StackStrategy diamondsStackStrategy,
@@ -129,11 +170,12 @@ public class Foundation {
 	}
 
 	private Foundation(List<CardStack> initializedStacks) {
-		
-		// Extract out the individual CardStacks from the initialized stack argument
-		for ( CardStack initializedStack : initializedStacks ) {
+
+		// Extract out the individual CardStacks from the initialized stack
+		// argument
+		for (CardStack initializedStack : initializedStacks) {
 			this.stacks.add(initializedStack);
 		}
 	}
-	
+
 }
