@@ -32,7 +32,7 @@ public interface Play {
 	 * @return the evaluated score of this play on the evaluated game.
 	 * @throws IllegalStateException if this Play doesn't have an evaluated Game.
 	 */
-	int getScore();
+	PlayScore getScore();
 	
 	/**
 	 * Execute this play on the evaluated game. 

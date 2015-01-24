@@ -53,9 +53,10 @@ public abstract class AbstractSuitStackStrategy implements StackStrategy {
 				return false;
 			}
 		}
+		
+		// Test 4 : top card is *NOT* null, so just compare the values
+		return (topCard.getValue() + 1) == candidateCard.getValue();
 
-		// For this abstract case, everything's good !
-		return true;
 	}
 
 	@Override

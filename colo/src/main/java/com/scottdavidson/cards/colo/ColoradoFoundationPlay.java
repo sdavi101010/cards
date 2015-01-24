@@ -6,6 +6,7 @@ import com.scottdavidson.cards.util.ColoradoTableauCard;
 import com.scottdavidson.cards.util.Foundation;
 import com.scottdavidson.cards.util.Game;
 import com.scottdavidson.cards.util.Play;
+import com.scottdavidson.cards.util.PlayScore;
 
 /**
  * Represents the single play that can be made in Colorado (that is play a card
@@ -126,12 +127,12 @@ public class ColoradoFoundationPlay implements Play {
 	}
 
 	@Override
-	public int getScore() {
+	public PlayScore getScore() {
 
 		if (canPlay()) {
-			return 100;
+			return null;
 		} else {
-			return 0;
+			return PlayScore.newCannotPlayScore();
 		}
 	}
 

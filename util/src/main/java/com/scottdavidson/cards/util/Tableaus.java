@@ -2,6 +2,8 @@ package com.scottdavidson.cards.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * In Colorado Solitaire, there are 20 stacks or tableaus; this class represents
@@ -14,7 +16,6 @@ public class Tableaus {
 
 	private final static int NUMBER_OF_STACKS_IN_COLORADO_SOLITAIRE = 20;
 	private Tableau tableaus[] = new Tableau[NUMBER_OF_STACKS_IN_COLORADO_SOLITAIRE];
-
 	public static Tableaus newTableaus(List<Card> initialTableauCards) {
 
 		// Error Check - must be 20 cards in list
@@ -33,6 +34,10 @@ public class Tableaus {
 		return new Tableaus();
 	}
 	
+	public List<Tableau> getIndexedTableaus(Card card) {
+		return this.cardToTableauMap.get(card);
+	}
+	
 	public Card addCardToEmptyStack(Card card) {
 		
 		// Find the empty stack
@@ -43,12 +48,44 @@ public class Tableaus {
 			return null;
 		}
 		else {
+			
+			// Add the card to the empty tableau
 			this.tableaus[index].addCard(card);
+			
+			// Add the card and tableau to the map
+			List<Tableau> tableauList = this.cardToTableauMap.get(card);
+			if ( null == tableauList ) {
+				tableauList = new ArrayList<Tableau>();
+				this.cardToTableauMap.put(card, tableauList);
+			}
+			tableauList.add(this.tableaus[index]);
+			
 			return card;
 		}
 	}
 	
+	private Map<Card,List<Tableau>> cardToTableauMap = new TreeMap<Card,List<Tableau>>();
+
 	public Card addCardToSpecifiedStack(Card card, int index) {
+		
+		// Remove the map entry for the referenced tableau (via the index)
+		//
+		// First, find the tableau in the map
+		ColoradoTableauCard currentTopCard = this.tableaus[index].topCard();
+		List<Tableau> tableauList = this.cardToTableauMap.get(currentTopCard);
+		
+		// Remove the tableau
+		tableauList.remove(this.tableaus[index]);
+		
+		// Add the new card and tableau to the map
+		tableauList = this.cardToTableauMap.get(card);
+		if ( null == tableauList ) {
+			tableauList = new ArrayList<Tableau>();
+			this.cardToTableauMap.put(card, tableauList);
+		}
+		tableauList.add(this.tableaus[index]);
+		
+		// Add the card to the specified tableau
 		return this.tableaus[index].addCard(card);
 	}
 	
